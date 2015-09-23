@@ -1,0 +1,19 @@
+{
+  "name": "acornJelly",
+  "description": "",
+  "homepage": "",
+  "main": "",
+  "version": "0.0.1",
+  "engines": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inswave/acornJelly.git"
+  },
+  "license": "MIT",
+  "scripts": {},
+  "bin": {},
+  "dependencies": {
+    "acorn": "^2.4.0"
+  }
+}

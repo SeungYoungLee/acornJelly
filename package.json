@@ -4,8 +4,7 @@
   "homepage": "",
   "main": "",
   "version": "0.0.1",
-  "engines": {
-  },
+  "engines": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/inswave/acornJelly.git"
@@ -14,6 +13,7 @@
   "scripts": {},
   "bin": {},
   "dependencies": {
-    "acorn": "^2.4.0"
+    "acorn": "^2.4.0",
+    "underscore": "^1.8.3"
   }
 }

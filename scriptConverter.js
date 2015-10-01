@@ -10,19 +10,34 @@ var confFile = './conf/scriptConverter.json',
     srcPath = conf.srcPath,
     destPath = conf.destPath;
 
+var convert = function convert( hierarchy, base, p ) {
+    var fileList = hierarchy[p],
+        files = fileList.files,
+        dirs = fileList.dirs;
+
+    console.log( 'path ' + base + ' / ' + p );
+    //console.log( JSON.stringify(fileList) );
+
+    files.forEach( function(f) {
+        var options = {
+                silent: true
+            },
+            code = fs.readFileSync( path.resolve( base, p, f ), "utf8" );
+
+        console.log(f);
+
+        scriptParser.parse( code, options );
+    } );
+
+    dirs.forEach( function(o) {
+        convert( o, path.resolve( base, p ), Object.keys(o)[0] );
+    } );
+};
+
 srcPath.forEach( function(p) {
     var hierarchy = fileManager.getFileHierarchy(p);
     //console.log( JSON.stringify(hierarchy) );
 
-    var fileList = hierarchy[p];
-    console.log( JSON.stringify(fileList) );
-
-    var files = fileList.files;
-    var dirs = fileList.dirs;
-
-    files.forEach( function(f) {
-        var code = fs.readFileSync( path.resolve( p, f ), "utf8" );
-        scriptParser.parse(code);
-    } );
+    convert( hierarchy, '', p );
   }
 );

@@ -1,0 +1,56 @@
+{
+  "/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/src/": {
+    "files": ["basic.js"],
+    "dirs": [{
+      "skt": {
+        "files": [],
+        "dirs": [{
+          "js": {
+            "files": ["ZAPP_Combo.js", "ZAPP_Grid.js", "ZAPP_Radio.js", "ZAPP_Service.js", "ZAPP_ToolTip.js", "test.js"],
+            "dirs": []
+          }
+        }, {
+          "xml": {
+            "files": [],
+            "dirs": [{
+              "col": {
+                "files": [],
+                "dirs": [{
+                  "blk": {
+                    "files": ["ZCOLSBLK01010.xml", "ZCOLSBLK01020.xml", "ZCOLSBLK01030.xml", "ZCOLSBLK01110.xml", "ZCOLSBLK09010.xml"],
+                    "dirs": []
+                  }
+                }, {
+                  "cam": {
+                    "files": ["ZCOLSCAM10040.xml"],
+                    "dirs": []
+                  }
+                }, {
+                  "cns": {
+                    "files": ["ZCOLSCNS03410.xml"],
+                    "dirs": []
+                  }
+                }, {
+                  "rdt": {
+                    "files": ["ZCOLSRDT01050.xml"],
+                    "dirs": []
+                  }
+                }]
+              }
+            }, {
+              "fin": {
+                "files": ["ZFINSSTM00300.xml"],
+                "dirs": []
+              }
+            }, {
+              "pay": {
+                "files": ["ZPAYSPMT00620.xml"],
+                "dirs": []
+              }
+            }]
+          }
+        }]
+      }
+    }]
+  }
+}

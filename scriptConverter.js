@@ -1,7 +1,8 @@
 var fs = require('fs'),
-    acorn = require('acorn/dist/acorn_loose');
+    path = require('path');
 
-var fileManager = require('./util/fileManager');
+var fileManager = require('./util/fileManager' ),
+    scriptParser = require( './util/parser' );
 
 var confFile = './conf/scriptConverter.json',
     content = fs.readFileSync( confFile, 'utf-8' ),
@@ -9,46 +10,19 @@ var confFile = './conf/scriptConverter.json',
     srcPath = conf.srcPath,
     destPath = conf.destPath;
 
-for ( sp in srcPath ) {
-  console.log( srcPath[sp] );
+srcPath.forEach( function(p) {
+    var hierarchy = fileManager.getFileHierarchy(p);
+    //console.log( JSON.stringify(hierarchy) );
 
-  var hierarchy = fileManager.getFileHierarchy( srcPath[sp] );
-  console.log( JSON.stringify(hierarchy) );
+    var fileList = hierarchy[p];
+    console.log( JSON.stringify(fileList) );
 
-  //var
-}
+    var files = fileList.files;
+    var dirs = fileList.dirs;
 
-//var tokenize = false,
-//    silent = false;
-//
-//var fileList = [
-//    'samples/basic.js',
-//    'samples/test.js'
-//  ],
-//  infile = fileList[1];
-//
-//var parsed,
-//    tokens,
-//    options = {};
-//
-//options.locations = true;
-//
-//if ( tokenize ) {
-//  tokens = [];
-//  options.onToken = tokens;
-//}
-//
-//var code = fs.readFileSync( infile, "utf8" );
-//code = code.replace( /<>/g, '!=' ).replace( /Var\s+/g, 'var ' );
-//
-//try {
-//  parsed = acorn.parse_dammit( code, options );
-//} catch(e) {
-//  // SyntaxError
-//  console.error( e.message + ' loc ' + JSON.stringify( e.loc ) );
-//  process.exit(1);
-//}
-//
-//if ( !silent ) {
-//  console.log( JSON.stringify( tokenize ? tokens : parsed, null, 2 ) );
-//}
+    files.forEach( function(f) {
+        var code = fs.readFileSync( path.resolve( p, f ), "utf8" );
+        scriptParser.parse(code);
+    } );
+  }
+);

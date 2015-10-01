@@ -40,7 +40,11 @@ module.exports.getFileList = function ( dir, done ) {
   } );
 };
 
-module.exports.getFileHierarchy = function ( dir, hierarchy, done ) {
+module.exports.getFileHierarchy = function ( baseDir, dir, hierarchy ) {
+  if ( !dir ) {
+    dir = baseDir;
+  }
+
   if ( !hierarchy ) {
     hierarchy = {};
   }
@@ -52,15 +56,15 @@ module.exports.getFileHierarchy = function ( dir, hierarchy, done ) {
 
   var fullPath,
       extName = '',
-      list = fs.readdirSync(dir);
+      list = fs.readdirSync(baseDir);
 
   list.forEach( function(file) {
-    fullPath = path.resolve( dir, file );
+    fullPath = path.resolve( baseDir, file );
 
     if ( fs.statSync(fullPath).isDirectory() ) {
       var subDir = {};
       hierarchy[dir].dirs.push( subDir );
-      fileManager.getFileHierarchy( fullPath, subDir );
+      fileManager.getFileHierarchy( fullPath, file, subDir );
     } else {
       extName = path.extname(file);
       if ( extName === '.xml' || extName === '.js' ) {

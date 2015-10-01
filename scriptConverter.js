@@ -14,6 +14,8 @@ for ( sp in srcPath ) {
 
   var hierarchy = fileManager.getFileHierarchy( srcPath[sp] );
   console.log( JSON.stringify(hierarchy) );
+
+  //var
 }
 
 //var tokenize = false,

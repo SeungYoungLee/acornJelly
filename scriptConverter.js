@@ -24,13 +24,15 @@ var convert = function convert( hierarchy, base, p ) {
     var options = {
           silent: true
         },
-        xml = path.extname(f) === '.xml',
-        scriptCode,
+        isXML = path.extname(f) === '.xml',
+        xml, doc, scriptCode,
         code = fs.readFileSync( path.resolve( base, p, f ), "utf8" );
 
     console.log(f);
-    if ( xml ) {
-      scriptCode = domUtil.getScriptNodes(code);
+    if ( isXML ) {
+      xml = domUtil.getScriptNodes(code);
+      doc = xml.doc;
+      scriptCode = xml.scriptCode;
     } else {
       scriptCode = [];
       scriptCode.push(code);
@@ -41,8 +43,8 @@ var convert = function convert( hierarchy, base, p ) {
       list[idx] = scriptConverter.convert( ast, options );
     } );
 
-    if ( xml ) {
-      code = domUtil.setScriptNodes( code, scriptCode );
+    if ( isXML ) {
+      code = domUtil.setScriptNodes( doc, scriptCode );
     } else {
       code = scriptCode.join('');
     }

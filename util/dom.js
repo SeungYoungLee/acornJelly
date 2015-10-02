@@ -26,11 +26,11 @@ module.exports.getScriptNodes = function getScriptNodes( content ) {
 
 module.exports.setScriptNodes = function getScriptNodes( doc, nodes, scriptCode ) {
   scriptCode.forEach( function( code, i ) {
-    //console.log(code);
-    var cdataNode = doc.createCDATASection(code);
-    console.log( cdataNode.toString() );
+    var cdataNode = doc.createCDATASection(code),
+        scriptNode = doc.createElement('script');
 
-    doc.replaceChild( cdataNode, nodes[i] );
+    scriptNode.appendChild(cdataNode);
+    doc.replaceChild( scriptNode, nodes[i] );
   } );
 
   return doc.toString();

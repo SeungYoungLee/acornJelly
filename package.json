@@ -14,6 +14,8 @@
   "bin": {},
   "dependencies": {
     "acorn": "^2.4.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "xmldom": "^0.1.19",
+    "xpath": "0.0.9"
   }
 }

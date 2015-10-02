@@ -25,13 +25,12 @@ var convert = function convert( hierarchy, base, p ) {
           silent: true
         },
         isXML = path.extname(f) === '.xml',
-        xml, doc, scriptCode,
+        xml, scriptCode,
         code = fs.readFileSync( path.resolve( base, p, f ), "utf8" );
 
     console.log(f);
     if ( isXML ) {
       xml = domUtil.getScriptNodes(code);
-      doc = xml.doc;
       scriptCode = xml.scriptCode;
     } else {
       scriptCode = [];
@@ -39,12 +38,13 @@ var convert = function convert( hierarchy, base, p ) {
     }
 
     scriptCode.forEach( function( scriptContent, idx, list ) {
+      console.log( scriptContent );
       var ast = scriptParser.parse( scriptContent, options );
       list[idx] = scriptConverter.convert( ast, options );
     } );
 
     if ( isXML ) {
-      code = domUtil.setScriptNodes( doc, scriptCode );
+      code = domUtil.setScriptNodes( xml.doc, xml.nodes, scriptCode );
     } else {
       code = scriptCode.join('');
     }

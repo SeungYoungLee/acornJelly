@@ -1,7 +1,7 @@
 var domParser = require('xmldom').DOMParser,
     xpath = require('xpath');
 
-var CDATASection = ['<![CDATA[', '', ']]>'];
+var CDATASection = [ '<![CDATA[', ']]>' ];
 
 module.exports.getScriptNodes = function getScriptNodes( content ) {
   var result = {},
@@ -10,12 +10,13 @@ module.exports.getScriptNodes = function getScriptNodes( content ) {
       nodes = select( '//x:head/x:script', doc );
 
   result.doc = doc;
+  result.nodes = nodes;
   result.scriptCode = [];
 
   nodes.forEach( function( node ) {
     var textContent = node.textContent,
         idx = [ textContent.indexOf(CDATASection[0]) + CDATASection[0].length,
-                textContent.lastIndexOf(CDATASection[2]) ];
+                textContent.lastIndexOf(CDATASection[1]) ];
 
     result.scriptCode.push( textContent.substring( idx[0], idx[1] ) );
   } );
@@ -23,8 +24,14 @@ module.exports.getScriptNodes = function getScriptNodes( content ) {
   return result;
 };
 
-module.exports.setScriptNodes = function getScriptNodes( code, scriptCode ) {
+module.exports.setScriptNodes = function getScriptNodes( doc, nodes, scriptCode ) {
+  scriptCode.forEach( function( code, i ) {
+    //console.log(code);
+    var cdataNode = doc.createCDATASection(code);
+    console.log( cdataNode.toString() );
 
+    doc.replaceChild( cdataNode, nodes[i] );
+  } );
 
-  return code;
+  return doc.toString();
 };

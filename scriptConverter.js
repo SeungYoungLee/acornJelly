@@ -55,10 +55,10 @@ var convert = function convert( hierarchy, base, p ) {
   } );
 };
 
-  srcPathList.forEach( function(p) {
-    var hierarchy = fileManager.getFileHierarchy(p);
+srcPathList.forEach( function(p) {
+  var hierarchy = fileManager.getFileHierarchy(p);
 
-    srcPath = p;
-    convert( hierarchy, p, '' );
-  }
+  srcPath = p;
+  convert( hierarchy, p, '' );
+}
 );

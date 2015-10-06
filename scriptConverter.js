@@ -37,7 +37,6 @@ var convert = function convert( hierarchy, base, p ) {
       var options = Object.create(optionsProto),
           ast = scriptParser.parse( scriptContent, options );
 
-      console.log( JSON.stringify( ast ) );
       list[idx] = scriptConverter.convert( ast, options );
     } );
 

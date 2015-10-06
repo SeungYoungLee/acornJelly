@@ -1,4 +1,8 @@
 {
   "srcPath": ["/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/src/"],
-  "destPath": "/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/dest/"
+  "destPath": "/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/dest/",
+  "parseOptions": {
+    "locations": true,
+    "silent": true
+  }
 }

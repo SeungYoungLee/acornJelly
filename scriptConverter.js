@@ -12,7 +12,8 @@ var confFile = './conf/scriptConverter.json',
     conf = JSON.parse( content ),
     srcPathList = conf.srcPath,
     destPath = conf.destPath,
-    srcPath;
+    srcPath,
+    options = conf.parseOptions || {};
 
 var convert = function convert( hierarchy, base, p ) {
   var fileList = hierarchy[p || base],
@@ -20,10 +21,7 @@ var convert = function convert( hierarchy, base, p ) {
       dirs = fileList.dirs;
 
   files.forEach( function(f) {
-    var options = {
-          silent: true
-        },
-        isXML = path.extname(f) === '.xml',
+    var isXML = path.extname(f) === '.xml',
         xml, scriptCode,
         code = fs.readFileSync( path.resolve( base, p, f ), "utf8" );
 

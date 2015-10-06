@@ -1,8 +1,10 @@
 {
-  "srcPath": ["/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/src/"],
+  "srcPath": ["/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/src2/"],
   "destPath": "/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/dest/",
   "parseOptions": {
     "locations": true,
-    "silent": true
+    "silent": true,
+    "onComment": true,
+    "onToken": false
   }
 }

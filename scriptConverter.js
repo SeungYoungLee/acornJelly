@@ -13,7 +13,7 @@ var confFile = './conf/scriptConverter.json',
     srcPathList = conf.srcPath,
     destPath = conf.destPath,
     srcPath,
-    options = conf.parseOptions || {};
+    optionsProto = conf.parseOptions || {};
 
 var convert = function convert( hierarchy, base, p ) {
   var fileList = hierarchy[p || base],
@@ -34,7 +34,10 @@ var convert = function convert( hierarchy, base, p ) {
     }
 
     scriptCode.forEach( function( scriptContent, idx, list ) {
-      var ast = scriptParser.parse( scriptContent, options );
+      var options = Object.create(optionsProto),
+          ast = scriptParser.parse( scriptContent, options );
+
+      console.log( JSON.stringify( ast ) );
       list[idx] = scriptConverter.convert( ast, options );
     } );
 

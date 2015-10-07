@@ -38,6 +38,14 @@ var convert = function convert( hierarchy, base, p ) {
       var options = Object.create(optionsProto),
           ast = scriptParser.parse( scriptContent, options );
 
+      if ( isXML && xmlOptions.componentID ) {
+        options.component = xml.component;
+      }
+
+      if ( isXML && xmlOptions.dataListID ) {
+        options.dataList = xml.dataList;
+      }
+
       list[idx] = scriptConverter.convert( ast, options );
     } );
 

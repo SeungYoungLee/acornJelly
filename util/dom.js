@@ -23,8 +23,10 @@ var getExtraProp = function getExtraProp( node, type, result ) {
     }
   }
 
-  if ( type === 'select1' ) {
+  if ( type === 'select1' || type === 'select' ) {
     result.appearance = node.getAttribute('appearance');
+  } else if ( type === 'wframe' ) {
+    result.src = node.getAttribute('src');
   }
 };
 
@@ -47,11 +49,11 @@ var getSubModule = function getSubModule( baseNode, baseName, result ) {
   var keepGoing = true,
       id, nodes;
 
-  if ( baseName === 'select1' ) {
+  if ( baseName === 'select1' || baseName === 'select' || baseName === 'autoComplete' ) {
     keepGoing = false;
     nodes = xfSelect( 'xf:choices/xf:itemset', baseNode );
 
-    if ( nodes ) {
+    if ( nodes.length > 0 ) {
       nodes = nodes[0];
       result.nodeset = nodes.getAttribute('nodeset');
     }
@@ -97,7 +99,7 @@ var getComponentID = function getComponentID( baseNode, result ) {
     for ( i = 0; i < childrenLength; i++ ) {
       node = childNodes.item(i);
       if ( node.nodeType === ELEMENT_NODE && ( node.prefix === 'w2' || node.prefix === 'xf' ) ) {
-        console.log( node.nodeName + ' ' + node.prefix + ' ' + node.localName + ' ' + node.getAttribute('id') );
+        //console.log( node.nodeName + ' ' + node.prefix + ' ' + node.localName + ' ' + node.getAttribute('id') );
         id = node.getAttribute('id');
 
         if (id) {

@@ -9,6 +9,20 @@ var CDATASection = [ '<![CDATA[', ']]>' ],
     ELEMENT_NODE = 1;
 
 var getExtraProp = function getExtraProp( node, type, result ) {
+  var i, item,
+      attributes = node.attributes,
+      attributeLength = attributes.length;
+
+  for ( i = 0; i < attributeLength; i++ ) {
+    item = attributes.item(i);
+    if ( item.prefix === 'ev' ) {
+      if ( !result.events ) {
+        result.events = {};
+      }
+      result.events[item.localName] = item.nodeValue;
+    }
+  }
+
   if ( type === 'select1' ) {
     result.appearance = node.getAttribute('appearance');
   }

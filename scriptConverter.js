@@ -13,6 +13,7 @@ var confFile = './conf/scriptConverter.json',
     srcPathList = conf.srcPath,
     destPath = conf.destPath,
     srcPath,
+    xmlOptions = conf.xmlOptions || {},
     optionsProto = conf.parseOptions || {};
 
 var convert = function convert( hierarchy, base, p ) {
@@ -26,7 +27,7 @@ var convert = function convert( hierarchy, base, p ) {
         code = fs.readFileSync( path.resolve( base, p, f ), "utf8" );
 
     if ( isXML ) {
-      xml = domUtil.getScriptNodes(code);
+      xml = domUtil.getScriptNodes( code, xmlOptions );
       scriptCode = xml.scriptCode;
     } else {
       scriptCode = [];

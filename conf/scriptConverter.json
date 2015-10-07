@@ -1,6 +1,11 @@
 {
   "srcPath": ["/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/src2/"],
   "destPath": "/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/dest/",
+  "xmlOptions": {
+    "componentID": true,
+    "dataListID": true,
+    "columnID": true
+  },
   "parseOptions": {
     "locations": true,
     "silent": true,

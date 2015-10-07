@@ -1,7 +1,52 @@
 var domParser = require('xmldom').DOMParser,
     xpath = require('xpath');
 
-var CDATASection = [ '<![CDATA[', ']]>' ];
+var CDATASection = [ '<![CDATA[', ']]>' ],
+    ELEMENT_NODE = 1;
+
+var getExtraProp = function getExtraProp( node, type, result ) {
+  if ( type === 'select1' ) {
+    result.appearance = node.getAttribute('appearance');
+  }
+};
+
+var getSubModule = function getSubModule( baseNode, result, baseName ) {
+};
+
+var getComponentID = function getComponentID( baseNode, result, baseName ) {
+  var i, id, name, node, childNodes, childrenLength;
+
+  if ( baseNode.hasChildNodes() ) {
+    childNodes = baseNode.childNodes;
+    childrenLength = childNodes.length;
+
+    for ( i = 0; i < childrenLength; i++ ) {
+      node = childNodes.item(i);
+      if ( node.nodeType === ELEMENT_NODE && ( node.prefix === 'w2' || node.prefix === 'xf' ) ) {
+        console.log( node.nodeName + ' ' + node.prefix + ' ' + node.localName + ' ' + node.getAttribute('id') + ' ' + baseName );
+        id = node.getAttribute('id');
+
+        if ( baseName ) {
+          getSubModule( baseNode, result, baseName );
+        } else if (id) {
+          name = node.localName;
+
+          result[id] = {
+            type: name
+          };
+
+          getExtraProp( node, name, result[id] );
+
+          if ( name === 'select1' || name === 'gridView' || name === 'tabControl' ) {
+            getComponentID( node, result[id], name );
+          } else {
+            getComponentID( node, result, null );
+          }
+        }
+      }
+    }
+  }
+};
 
 module.exports.getScriptNodes = function getScriptNodes( content, xmlOptions ) {
   var result = {},
@@ -21,6 +66,16 @@ module.exports.getScriptNodes = function getScriptNodes( content, xmlOptions ) {
     result.scriptCode.push( textContent.substring( idx[0], idx[1] ) );
   } );
 
+  if ( xmlOptions.componentID ) {
+    result.component = {};
+    nodes = select( '/x:html/x:body', doc );
+    nodes = nodes[0];
+
+    getComponentID( nodes, result.component );
+
+    console.log( JSON.stringify( result.component ) );
+  }
+
   if ( xmlOptions.dataListID ) {
     result.dataList = {};
     select = xpath.useNamespaces( { "w2": "http://www.inswave.com/websquare" } );
@@ -39,8 +94,6 @@ module.exports.getScriptNodes = function getScriptNodes( content, xmlOptions ) {
       }
     } );
   }
-
-  console.log( JSON.stringify( result.dataList ) );
 
   return result;
 };

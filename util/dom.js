@@ -2,7 +2,8 @@ var domParser = require('xmldom').DOMParser,
     xpath = require('xpath');
 
 var xSelect = xpath.useNamespaces( { "x": "http://www.w3.org/1999/xhtml" } ),
-    w2Select = xpath.useNamespaces( { "w2": "http://www.inswave.com/websquare" } );
+    w2Select = xpath.useNamespaces( { "w2": "http://www.inswave.com/websquare" } ),
+    xfSelect = xpath.useNamespaces( { "xf": "http://www.w3.org/2002/xforms" } );
 
 var CDATASection = [ '<![CDATA[', ']]>' ],
     ELEMENT_NODE = 1;
@@ -13,11 +14,66 @@ var getExtraProp = function getExtraProp( node, type, result ) {
   }
 };
 
-var getSubModule = function getSubModule( baseNode, result, baseName ) {
+var getGridColumns = function getGridColumns( select, baseNode, result ) {
+  var nodes, childNodes;
 
+  nodes = w2Select( select, baseNode );
+
+  nodes.forEach( function ( node, i ) {
+    result[i] = [];
+    childNodes = w2Select( 'w2:column', node );
+
+    childNodes.forEach( function ( column ) {
+      result[i].push( column.getAttribute('id') );
+    } );
+  } );
 };
 
-var getComponentID = function getComponentID( baseNode, result, baseName ) {
+var getSubModule = function getSubModule( baseNode, baseName, result ) {
+  var keepGoing = true,
+      id, nodes;
+
+  if ( baseName === 'select1' ) {
+    keepGoing = false;
+    nodes = xfSelect( 'xf:choices/xf:itemset', baseNode );
+
+    if ( nodes ) {
+      nodes = nodes[0];
+      result.nodeset = nodes.getAttribute('nodeset');
+    }
+  } else if ( baseName === 'gridView' ) {
+    keepGoing = false;
+    result.headers = [];
+    result.gBody = [];
+    result.footer = [];
+    result.subTotal = [];
+
+    getGridColumns( 'w2:header/w2:row', baseNode, result.headers );
+    getGridColumns( 'w2:gBody/w2:row', baseNode, result.gBody );
+    getGridColumns( 'w2:footer/w2:row', baseNode, result.footer );
+    getGridColumns( 'w2:subTotal/w2:row', baseNode, result.subTotal );
+  } else if ( baseName === 'tabControl' ) {
+    keepGoing = false;
+    result.tabs = [];
+    result.content = {};
+
+    nodes = w2Select( 'w2:tabs', baseNode );
+    nodes.forEach( function ( node ) {
+      result.tabs.push( node.getAttribute('id') )
+    } );
+
+    nodes = w2Select( 'w2:content', baseNode );
+    nodes.forEach( function ( node ) {
+      id = node.getAttribute('id');
+      result.content[id] = {};
+      getComponentID( node, result.content[id] );
+    } );
+  }
+
+  return keepGoing;
+};
+
+var getComponentID = function getComponentID( baseNode, result ) {
   var i, id, name, node, childNodes, childrenLength;
 
   if ( baseNode.hasChildNodes() ) {
@@ -27,12 +83,10 @@ var getComponentID = function getComponentID( baseNode, result, baseName ) {
     for ( i = 0; i < childrenLength; i++ ) {
       node = childNodes.item(i);
       if ( node.nodeType === ELEMENT_NODE && ( node.prefix === 'w2' || node.prefix === 'xf' ) ) {
-        console.log( node.nodeName + ' ' + node.prefix + ' ' + node.localName + ' ' + node.getAttribute('id') + ' ' + baseName );
+        console.log( node.nodeName + ' ' + node.prefix + ' ' + node.localName + ' ' + node.getAttribute('id') );
         id = node.getAttribute('id');
 
-        if ( baseName ) {
-          getSubModule( baseNode, result, baseName );
-        } else if (id) {
+        if (id) {
           name = node.localName;
 
           result[id] = {
@@ -40,11 +94,8 @@ var getComponentID = function getComponentID( baseNode, result, baseName ) {
           };
 
           getExtraProp( node, name, result[id] );
-
-          if ( name === 'select1' || name === 'gridView' || name === 'tabControl' ) {
-            getComponentID( node, result[id], name );
-          } else {
-            getComponentID( node, result, null );
+          if ( getSubModule( node, name, result[id] ) ) {
+            getComponentID( node, result );
           }
         }
       }

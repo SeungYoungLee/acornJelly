@@ -99,7 +99,6 @@ var getComponentID = function getComponentID( baseNode, result ) {
     for ( i = 0; i < childrenLength; i++ ) {
       node = childNodes.item(i);
       if ( node.nodeType === ELEMENT_NODE && ( node.prefix === 'w2' || node.prefix === 'xf' ) ) {
-        //console.log( node.nodeName + ' ' + node.prefix + ' ' + node.localName + ' ' + node.getAttribute('id') );
         id = node.getAttribute('id');
 
         if (id) {
@@ -142,8 +141,6 @@ module.exports.getScriptNodes = function getScriptNodes( content, xmlOptions ) {
     nodes = nodes[0];
 
     getComponentID( nodes, result.component );
-
-    console.log( JSON.stringify( result.component ) );
   }
 
   if ( xmlOptions.dataListID ) {

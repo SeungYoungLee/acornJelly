@@ -1,5 +1,5 @@
 {
-  "srcPath": ["/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/src/"],
+  "srcPath": ["/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/src2/"],
   "destPath": "/Users/maninzoo/Contents/temp/10_01_2015/script_parsing/dest/",
   "xmlOptions": {
     "componentID": true,
@@ -11,5 +11,9 @@
     "silent": true,
     "onComment": true,
     "onToken": false
+  },
+  "beautifyOptions": {
+    "indent_size": 2,
+    "end_with_newline": true
   }
 }

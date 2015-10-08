@@ -1,6 +1,7 @@
 var fs = require('fs'),
+    path = require('path'),
     mkdir = require('mkdirp'),
-    path = require('path');
+    beautifier = require('js-beautify').js_beautify;
 
 var fileManager = require('./util/fileManager' ),
     scriptParser = require( './util/parser' ),
@@ -14,7 +15,8 @@ var confFile = './conf/scriptConverter.json',
     destPath = conf.destPath,
     srcPath,
     xmlOptions = conf.xmlOptions || {},
-    optionsProto = conf.parseOptions || {};
+    optionsProto = conf.parseOptions || {},
+    beautifyOptions = conf.beautifyOptions || {};
 
 var convert = function convert( hierarchy, base, p ) {
   var fileList = hierarchy[p || base],
@@ -47,6 +49,8 @@ var convert = function convert( hierarchy, base, p ) {
       }
 
       list[idx] = scriptConverter.convert( ast, options );
+      list[idx] = beautifier( list[idx], beautifyOptions );
+      list[idx] = '\n' + list[idx];
     } );
 
     if ( isXML ) {

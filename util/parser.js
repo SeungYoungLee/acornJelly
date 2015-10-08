@@ -1,6 +1,7 @@
-var acorn = require('acorn/dist/acorn_loose');
+var acorn = require('acorn/dist/acorn_loose'),
+    beautifier = require('js-beautify').js_beautify;
 
-module.exports.parse = function ( code, options ) {
+module.exports.parse = function ( code, options, beautifyOptions ) {
   var parsed;
 
   options = options || {};
@@ -17,7 +18,9 @@ module.exports.parse = function ( code, options ) {
     options.onComment = [];
   }
 
-  code = code.replace( /<>/g, '!=' ).replace( /Var\s+/g, 'var ' );
+  code = code.replace( /<>/g, '!=' ).replace( /Var /g, 'var ' )
+             .replace( / OR /g, ' || ' ).replace( / and /g, ' && ' );
+  code = beautifier( code, beautifyOptions );
 
   try {
     parsed = acorn.parse_dammit( code, options );
